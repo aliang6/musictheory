@@ -48,11 +48,19 @@ public static String intervalFinder(String note1, String note2){ //Figures out t
 	public static String nextNote(String note, String interval){ //Gives the next note given the starting note and the interval
 		String noteLetter = note.substring(0, 1);
 		int accidentalValue = 0;
-		if(note.length() > 1){
+		if(note.length() > 2){
+			if(note.substring(1, 3).equals("bb")) {
+				accidentalValue = -2;
+			}
+		}
+		else if(note.length() > 1){
 			if(note.substring(1, 2).equals("b")) {
 				accidentalValue = -1;
 			}
 			else if(note.substring(1,2).equals("#")) {
+				accidentalValue = 1;
+			}
+			else if(note.substring(1,2).equals("x")) {
 				accidentalValue = 1;
 			}
 		}
@@ -121,6 +129,71 @@ public static String intervalFinder(String note1, String note2){ //Figures out t
 		majorScale[7] = tonic;
 		return majorScale;
 	}
+
+//=========================================
+
+//Minor Scale Construction=================
+	public static String[] naturalMinorScale(String tonic){
+		String[] majorScale = new String[8];
+		majorScale[0] = tonic;
+		//System.out.println(majorScale[0]);
+		majorScale[1] = nextNote(tonic, "M2");
+		//System.out.println(majorScale[1]);
+		majorScale[2] = nextNote(tonic, "M3");
+		//System.out.println(majorScale[2]);
+		majorScale[3] = nextNote(tonic, "P4");
+		//System.out.println(majorScale[3]);
+		majorScale[4] = nextNote(tonic, "P5");
+		//System.out.println(majorScale[4]);
+		majorScale[5] = nextNote(tonic, "M6");
+		//System.out.println(majorScale[5]);
+		majorScale[6] = nextNote(tonic, "M7");
+		//System.out.println(majorScale[6]);
+		majorScale[7] = tonic;
+		return majorScale;
+	}
+
+	public static String[] harmonicMinorScale(String tonic){ //Sharping the seventh note in the natural minor scale
+		String[] minorScale = new String[8];
+		minorScale[0] = tonic;
+		//System.out.println(minorScale[0]);
+		minorScale[1] = nextNote(tonic, "M2");
+		//System.out.println(minorScale[1]);
+		minorScale[2] = nextNote(tonic, "m3");
+		//System.out.println(minorScale[2]);
+		minorScale[3] = nextNote(tonic, "P4");
+		//System.out.println(minorScale[3]);
+		minorScale[4] = nextNote(tonic, "P5");
+		//System.out.println(minorScale[4]);
+		minorScale[5] = nextNote(tonic, "m6");
+		//System.out.println(minorScale[5]);
+		minorScale[6] = nextNote(tonic, "M7");
+		//System.out.println(minorScale[6]);
+		minorScale[7] = tonic;
+		return minorScale;
+	}
+
+	public static String[] melodicMinorScale(String tonic){ //Sharping the sixth and seventh note in the natural minor scale
+		String[] minorScale = new String[8];
+		minorScale[0] = tonic;
+		//System.out.println(minorScale[0]);
+		minorScale[1] = nextNote(tonic, "M2");
+		//System.out.println(minorScale[1]);
+		minorScale[2] = nextNote(tonic, "m3");
+		//System.out.println(minorScale[2]);
+		minorScale[3] = nextNote(tonic, "P4");
+		//System.out.println(minorScale[3]);
+		minorScale[4] = nextNote(tonic, "P5");
+		//System.out.println(minorScale[4]);
+		minorScale[5] = nextNote(tonic, "M6");
+		//System.out.println(minorScale[5]);
+		minorScale[6] = nextNote(tonic, "M7");
+		//System.out.println(minorScale[6]);
+		minorScale[7] = tonic;
+		return minorScale;
+	}
+
+
 
 //=========================================
 
@@ -257,16 +330,83 @@ public static void main(String[] args){
 	System.out.println(intervalFinder("Ab", "B")); //Should be A2;	*/
 	//System.out.println(intervalFinder("Ab", "B#")); //Unknown; 4 HalfSteps 
 
+	//Major Scale Tests
 	System.out.println(nextNote("C", "M2")); //Should be D
 	System.out.println(nextNote("C", "P4")); //Should be F
 	System.out.println(nextNote("Cb", "P4")); //Should be F
 	System.out.println(nextNote("C#", "P4")); //Should be F
 
-	System.out.println(displayScale(majorScale("C")));
+	System.out.println(displayScale(majorScale("C"))); //No Accidentals
+
+	System.out.println(displayScale(majorScale("G"))); //One Sharp: F
+	System.out.println(displayScale(majorScale("D"))); //Two Sharps: F and C
+	System.out.println(displayScale(majorScale("A"))); //Three Sharps: F, C, and G
+	System.out.println(displayScale(majorScale("E"))); //Four Sharps: F, C, G, and D
+	System.out.println(displayScale(majorScale("B"))); //Five Sharps: F, C, G, D, and A
+	System.out.println(displayScale(majorScale("F#"))); //Six Sharps: F, C, G, D, A, and E
+
 	System.out.println(displayScale(majorScale("C#"))); //All Sharps
-	System.out.println(displayScale(majorScale("D"))); //Two Sharps F and C
+	System.out.println(displayScale(majorScale("F"))); //One Flat: B
+	System.out.println(displayScale(majorScale("Bb"))); //Two Flats: B and E
+	System.out.println(displayScale(majorScale("Eb"))); //Three Flats: B, E, and A
+	System.out.println(displayScale(majorScale("Ab"))); //Four Flats: B, E, A, and D
+	System.out.println(displayScale(majorScale("Db"))); //Five Flats: B, E, A, D, and G
+	System.out.println(displayScale(majorScale("Gb"))); //Six Flats: B, E, A, D, G, and C
 	System.out.println(displayScale(majorScale("Cb"))); //All Flats
-	
+
+	//Natural Minor Scale Tests
+	System.out.println(displayScale(naturalMinorScale("A"))); //No Accidentals
+	System.out.println(displayScale(naturalMinorScale("E"))); //One Sharp: F
+	System.out.println(displayScale(naturalMinorScale("B"))); //Two Sharps: F and C
+	System.out.println(displayScale(naturalMinorScale("F#"))); //Three Sharps: F, C, and G
+	System.out.println(displayScale(naturalMinorScale("C#"))); //Four Sharps: F, C, G, and D
+	System.out.println(displayScale(naturalMinorScale("G#"))); //Five Sharps: F, C, G, D, and A
+	System.out.println(displayScale(naturalMinorScale("D#"))); //Six Sharps: F, C, G, D, A, and E
+	System.out.println(displayScale(naturalMinorScale("C#"))); //All Sharps
+
+	System.out.println(displayScale(naturalMinorScale("D"))); //One Flat: B
+	System.out.println(displayScale(naturalMinorScale("G"))); //Two Flats: B and E
+	System.out.println(displayScale(naturalMinorScale("C"))); //Three Flats: B, E, and A
+	System.out.println(displayScale(naturalMinorScale("F"))); //Four Flats: B, E, A, and D
+	System.out.println(displayScale(naturalMinorScale("Bb"))); //Five Flats: B, E, A, D, and G
+	System.out.println(displayScale(naturalMinorScale("Eb"))); //Six Flats: B, E, A, D, G, and C
+	System.out.println(displayScale(naturalMinorScale("Ab"))); //All Flats
+
+	//Harmonic Minor Scale Tests
+	System.out.println(displayScale(harmonicMinorScale("A"))); //No Accidentals
+	System.out.println(displayScale(harmonicMinorScale("E"))); //One Sharp: F
+	System.out.println(displayScale(harmonicMinorScale("B"))); //Two Sharps: F and C
+	System.out.println(displayScale(harmonicMinorScale("F#"))); //Three Sharps: F, C, and G
+	System.out.println(displayScale(harmonicMinorScale("C#"))); //Four Sharps: F, C, G, and D
+	System.out.println(displayScale(harmonicMinorScale("G#"))); //Five Sharps: F, C, G, D, and A
+	System.out.println(displayScale(harmonicMinorScale("D#"))); //Six Sharps: F, C, G, D, A, and E
+	System.out.println(displayScale(harmonicMinorScale("C#"))); //All Sharps
+
+	System.out.println(displayScale(harmonicMinorScale("D"))); //One Flat: B
+	System.out.println(displayScale(harmonicMinorScale("G"))); //Two Flats: B and E
+	System.out.println(displayScale(harmonicMinorScale("C"))); //Three Flats: B, E, and A
+	System.out.println(displayScale(harmonicMinorScale("F"))); //Four Flats: B, E, A, and D
+	System.out.println(displayScale(harmonicMinorScale("Bb"))); //Five Flats: B, E, A, D, and G
+	System.out.println(displayScale(harmonicMinorScale("Eb"))); //Six Flats: B, E, A, D, G, and C
+	System.out.println(displayScale(harmonicMinorScale("Ab"))); //All Flats
+
+	//Melodic Minor Scale Tests
+	System.out.println(displayScale(melodicMinorScale("A"))); //No Accidentals
+	System.out.println(displayScale(melodicMinorScale("E"))); //One Sharp: F
+	System.out.println(displayScale(melodicMinorScale("B"))); //Two Sharps: F and C
+	System.out.println(displayScale(melodicMinorScale("F#"))); //Three Sharps: F, C, and G
+	System.out.println(displayScale(melodicMinorScale("C#"))); //Four Sharps: F, C, G, and D
+	System.out.println(displayScale(melodicMinorScale("G#"))); //Five Sharps: F, C, G, D, and A
+	System.out.println(displayScale(melodicMinorScale("D#"))); //Six Sharps: F, C, G, D, A, and E
+	System.out.println(displayScale(melodicMinorScale("C#"))); //All Sharps
+
+	System.out.println(displayScale(melodicMinorScale("D"))); //One Flat: B
+	System.out.println(displayScale(melodicMinorScale("G"))); //Two Flats: B and E
+	System.out.println(displayScale(melodicMinorScale("C"))); //Three Flats: B, E, and A
+	System.out.println(displayScale(melodicMinorScale("F"))); //Four Flats: B, E, A, and D
+	System.out.println(displayScale(melodicMinorScale("Bb"))); //Five Flats: B, E, A, D, and G
+	System.out.println(displayScale(melodicMinorScale("Eb"))); //Six Flats: B, E, A, D, G, and C
+	System.out.println(displayScale(melodicMinorScale("Ab"))); //All Flats
 }
 
 
