@@ -13,29 +13,29 @@ public class musicTheoryToolkit{
 public static String intervalFinder(String note1, String note2){ //Figures out the interval between two notes.
 		int intervalNumber = 0;
 		int halfSteps = countHalfStep(note1, note2);
-		System.out.println(halfSteps);
+		//System.out.println(halfSteps);
 		String note1Letter = note1.substring(0,1);
 		String note2Letter = note2.substring(0,1);
 		intervalNumber = intervalNumber(note1Letter, note2Letter);
-		System.out.println(intervalNumber);
+		//System.out.println(intervalNumber);
 		int defaultHalfSteps = intervalHalfSteps[intervalNumber - 1];
-		System.out.println(defaultHalfSteps);
+		//System.out.println(defaultHalfSteps);
 		if (intervalNumber == 1 ||
 			intervalNumber == 4 ||
 			intervalNumber == 5 ||
-			intervalNumber == 8){
+			intervalNumber == 8 ){
 			int position = halfSteps - defaultHalfSteps + 1;
-			System.out.println(position);
+			//System.out.println(position);
 			String intervalType = perfectInterval[position];
-			System.out.println(intervalType);
+			//System.out.println(intervalType);
 			String interval = intervalType + Integer.toString(intervalNumber);
 			return interval;
 		}
 		else {
 			int position = halfSteps - defaultHalfSteps + 2;
-			System.out.println(position);
+			//System.out.println(position);
 			String intervalType = majorInterval[position];
-			System.out.println(intervalType);
+			//System.out.println(intervalType);
 			String interval = intervalType + Integer.toString(intervalNumber);
 			return interval;
 		}
@@ -47,11 +47,49 @@ public static String intervalFinder(String note1, String note2){ //Figures out t
 //Interval Progression=====================
 	public static String nextNote(String note, String interval){ //Gives the next note given the starting note and the interval
 		String noteLetter = note.substring(0, 1);
+		int accidentalValue = 0;
+		if(note.length() > 1){
+			if(note.substring(1, 2).equals("b")) {
+				accidentalValue = -1;
+			}
+			else if(note.substring(1,2).equals("#")) {
+				accidentalValue = 1;
+			}
+		}
 		int intervalNumber = Integer.parseInt(interval.substring(1,2));
 		String secondNote = notes[findNote(noteLetter) + intervalNumber - 1];
-		int defaultHalfSteps = intervalHalfSteps[intervalNumber - 1];
-		int halfSteps = countHalfStep(note, secondNote);
-		int quality = defaultHalfSteps - halfSteps + 2;
+		String intervalType = interval.substring(0,1);
+		//Interpretting the number of halfsteps based off the type of interval========
+		int defaultHalfSteps = 0;
+		if (intervalType.equals("M") ||
+			intervalType.equals("P")) {
+			defaultHalfSteps = intervalHalfSteps[intervalNumber - 1];
+		}
+		else if (intervalType.equals("A")){
+			defaultHalfSteps = intervalHalfSteps[intervalNumber - 1] + 1;
+		}
+		else if (intervalType.equals("m")){
+			defaultHalfSteps = intervalHalfSteps[intervalNumber - 1] - 1;
+		}
+		else if (intervalNumber == 1 ||
+			intervalNumber == 4 ||
+			intervalNumber == 5 ||
+			intervalNumber == 8){
+			if (intervalType.equals("d")){
+				defaultHalfSteps = intervalHalfSteps[intervalNumber - 1] - 1;
+			}
+		}
+		else {
+			defaultHalfSteps = intervalHalfSteps[intervalNumber - 1] - 2;
+		}
+
+		//=============================================================================
+		//System.out.println(note + secondNote);
+		int halfSteps = countHalfStep(noteLetter, secondNote);
+		int quality = defaultHalfSteps - halfSteps + 2 + accidentalValue;
+		//System.out.println(halfSteps);
+		//System.out.println(defaultHalfSteps);
+		//System.out.println(quality);
 		String accidental = accidentals[quality];
 		secondNote += accidental;
 		if(secondNote.substring(1, 2).equals("n")){
@@ -67,19 +105,19 @@ public static String intervalFinder(String note1, String note2){ //Figures out t
 	public static String[] majorScale(String tonic){
 		String[] majorScale = new String[8];
 		majorScale[0] = tonic;
-		System.out.println(majorScale[0]);
+		//System.out.println(majorScale[0]);
 		majorScale[1] = nextNote(tonic, "M2");
-		System.out.println(majorScale[1]);
+		//System.out.println(majorScale[1]);
 		majorScale[2] = nextNote(tonic, "M3");
-		System.out.println(majorScale[2]);
+		//System.out.println(majorScale[2]);
 		majorScale[3] = nextNote(tonic, "P4");
-		System.out.println(majorScale[3]);
+		//System.out.println(majorScale[3]);
 		majorScale[4] = nextNote(tonic, "P5");
-		System.out.println(majorScale[4]);
+		//System.out.println(majorScale[4]);
 		majorScale[5] = nextNote(tonic, "M6");
-		System.out.println(majorScale[5]);
+		//System.out.println(majorScale[5]);
 		majorScale[6] = nextNote(tonic, "M7");
-		System.out.println(majorScale[6]);
+		//System.out.println(majorScale[6]);
 		majorScale[7] = tonic;
 		return majorScale;
 	}
@@ -143,8 +181,8 @@ public static String intervalFinder(String note1, String note2){ //Figures out t
 		return pos;
 	}
 
-	//Notation is # for sharps and "f" for flats (Note-Accidental) (e.g. A#)
-	//Does not cover double flats or sharps
+	//Notation is # for sharps and "b" for flats (Note-Accidental) (e.g. A#)
+	//Does not cover double flats or double sharps
 	public static int countHalfStep(String first, String second){
 		int halfSteps = 0;
 		for(int x = findInDict(convertNotation(first)); x < findInDict(convertNotation(second), convertNotation(first)); x++){
@@ -225,9 +263,10 @@ public static void main(String[] args){
 	System.out.println(nextNote("C#", "P4")); //Should be F
 
 	System.out.println(displayScale(majorScale("C")));
-	System.out.println(displayScale(majorScale("Cb"))); //All Flats
 	System.out.println(displayScale(majorScale("C#"))); //All Sharps
 	System.out.println(displayScale(majorScale("D"))); //Two Sharps F and C
+	System.out.println(displayScale(majorScale("Cb"))); //All Flats
+	
 }
 
 
