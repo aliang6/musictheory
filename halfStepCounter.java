@@ -1,6 +1,7 @@
 public class halfStepCounter{ //Counts halfsteps between notes within one octave
 	public static String[] accidentals = {"bb", "b", "n", "#", "x"};
-	public static String[] noteDictionary = {"GA", "A", "AB", "B", "C", "CD", "D", "DE", "E", "F", "FG", "G", "GA", "A", "AB", "B", "C", "CD", "D", "DE", "E", "F", "FG", "G"};
+	//public static String[] noteDictionary = {"GA", "A", "AB", "B", "C", "CD", "D", "DE", "E", "F", "FG", "G", "GA", "A", "AB", "B", "C", "CD", "D", "DE", "E", "F", "FG", "G"};
+	public static String[] noteDictionary = {"GA", "A", "AB", "B","BC", "C", "CD", "D", "DE", "E", "EF", "F", "FG", "G", "GA", "A", "AB", "B", "BC", "C", "CD", "D", "DE", "E", "EF", "F", "FG", "G"};
 	public static String[] sharpScales = {"G", "D", "A", "E", "B", "F#", "C#"};
 	public static String[] flatScales = {"C", "F", "Bb", "Eb", "Ab", "Db", "Gb", "Cb"};
 
@@ -68,11 +69,23 @@ public class halfStepCounter{ //Counts halfsteps between notes within one octave
 	//Notation is # for sharps and "f" for flats (Note-Accidental) (e.g. A#)
 	//Does not cover double flats or sharps
 	public static int countHalfStep(String first, String second){
+		int halfSteps = 0;
+		for(int x = findInDict(convertNotation(first)); x < findInDict(convertNotation(second)); x++){
+			if (noteDictionary[x] != "BC" &&
+				noteDictionary[x] != "EF"){
+				x += 1;
+			}
+		}
 		return (Math.abs(findInDict(convertNotation(first)) - findInDict(convertNotation(second))));
 	}
 
 	public static String right(String note, int steps){
 		String diatonicNote = "";
+		for(int x = 0; x < steps; x++){
+			if (noteDictionary[x] != "BC" &&
+				noteDictionary[x] != "EF"){
+			}
+		}
 		diatonicNote = noteDictionary[findInDict(convertNotation(note)) + steps];
 		/*if(diatonicNote.substring(0,1).equals(note)){
 			diatonicNote = diatonicNote.substring(1, diatonicNote.length()) + "b";
@@ -190,7 +203,7 @@ public class halfStepCounter{ //Counts halfsteps between notes within one octave
 
 		System.out.println(displayScale(majorScale("C")));
 		System.out.println(displayScale(majorScale("D")));
-		System.out.println(displayScale(majorScale("C#")));		
+		System.out.println(displayScale(majorScale("C#"))); //Need recognition of F and B as E# and Cb respectively
 		System.out.println(displayScale(majorScale("Cb")));
 		System.out.println(displayScale(minorScale("A")));
 		System.out.println(displayScale(minorScale("C")));
