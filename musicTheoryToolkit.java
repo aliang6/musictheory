@@ -23,7 +23,7 @@ public static String intervalFinder(String note1, String note2){ //Figures out t
 		if (intervalNumber == 1 ||
 			intervalNumber == 4 ||
 			intervalNumber == 5 ||
-			intervalNumber == 8 ){
+			intervalNumber == 8 ) {
 			int position = halfSteps - defaultHalfSteps + 1;
 			//System.out.println(position);
 			String intervalType = perfectInterval[position];
@@ -193,9 +193,8 @@ public static String intervalFinder(String note1, String note2){ //Figures out t
 		return minorScale;
 	}
 
-
-
 //=========================================
+
 
 
 //Helper Functions=========================
